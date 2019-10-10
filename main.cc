@@ -4,13 +4,9 @@
 
 #include <uv.h>
 
-#include "plugin.h"
+#include "loader/plugin.h"
 
 typedef void (*init_plugin_function)();
-
-void mfp_register(const char *name) {
-    fprintf(stderr, "Registered plugin \"%s\"\n", name);
-}
 
 int main(int argc, char **argv) {
     if (argc == 1) {

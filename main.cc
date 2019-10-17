@@ -1,35 +1,15 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+// main.c
+#define WEBVIEW_IMPLEMENTATION
+#include "webview.h"
 
-#include <uv.h>
-
-#include "loader/plugin.h"
-
-typedef void (*init_plugin_function)();
-
-int main(int argc, char **argv) {
-    if (argc == 1) {
-        fprintf(stderr, "Usage: %s [plugin1] [plugin2] ...\n", argv[0]);
-        return 0;
-    }
-
-    uv_lib_t *lib = (uv_lib_t*) malloc(sizeof(uv_lib_t));
-    while (--argc) {
-        fprintf(stderr, "Loading %s\n", argv[argc]);
-        if (uv_dlopen(argv[argc], lib)) {
-            fprintf(stderr, "Error: %s\n", uv_dlerror(lib));
-            continue;
-        }
-
-        init_plugin_function init_plugin;
-        if (uv_dlsym(lib, "initialize", (void **) &init_plugin)) {
-            fprintf(stderr, "dlsym error: %s\n", uv_dlerror(lib));
-            continue;
-        }
-
-        init_plugin();
-    }
-
-    return 0;
+#ifdef WIN32
+int WINAPI WinMain(HINSTANCE hInt, HINSTANCE hPrevInst, LPSTR lpCmdLine,
+                   int nCmdShow) {
+#else
+int main() {
+#endif
+  /* Open wikipedia in a 800x600 resizable window */
+  webview("Minimal webview example",
+	  "https://en.m.wikipedia.org/wiki/Main_Page", 800, 600, 1);
+  return 0;
 }
